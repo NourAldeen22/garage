@@ -10,7 +10,7 @@ namespace Garage
     {
         static void Main(string[] args)
         {
-            
+            ;
         }
     }
 }
