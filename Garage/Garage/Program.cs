@@ -10,7 +10,8 @@ namespace Garage
     {
         static void Main(string[] args)
         {
-            ;
+            var ui = new UserInterface();
+            ui.MainMenu();
         }
     }
 }
