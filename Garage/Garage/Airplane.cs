@@ -2,18 +2,18 @@
 {
     public class Airplane : Vehicle
     {
-        public Airplane(string regnr, int wheels, string fuelType, int nrOfSeats) : base(regnr, wheels)
+        public Airplane(string regnr, string wheels, string fuelType, string nrOfSeats) : base(regnr, wheels)
         {
             FuelType = fuelType;
-            NrofSeats = nrOfSeats;
+            NrOfSeats = nrOfSeats;
         }
 
         public string FuelType { get; private set; }
-        public int NrofSeats { get; private set; }
+        public string NrOfSeats { get; private set; }
 
         public override string ToString()
         {
-            return $"This is an Airplane. " + base.ToString() + $" This plane runs on {FuelType} and has {NrofSeats} seats.";
+            return $"This is an Airplane. " + base.ToString() + $" This plane runs on {FuelType} and has {NrOfSeats} seats.";
         }
     }
 }

@@ -2,14 +2,14 @@
 {
     public class Boat : Vehicle
     {
-        public Boat(string regnr, int wheels, float length, int cylinderVolume) : base(regnr, wheels)
+        public Boat(string regnr, string wheels, string length, string cylinderVolume) : base(regnr, wheels)
         {
             Length = length;
             CylinderVolume = cylinderVolume;
         }
 
-        public float Length { get; private set; }
-        public int CylinderVolume { get; private set; }
+        public string Length { get; private set; }
+        public string CylinderVolume { get; private set; }
 
         public override string ToString()
         {

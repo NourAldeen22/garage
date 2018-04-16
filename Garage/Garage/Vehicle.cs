@@ -4,10 +4,10 @@
     {
         private string regnr;
 
-        public Vehicle(string regnr, int wheels)
+        public Vehicle(string regnr, string nrOfWheels)
         {
             Regnr = regnr;
-            Wheels = wheels;
+            NrOfWheels = nrOfWheels;
         }
 
         public string Regnr
@@ -16,11 +16,11 @@
             private set { regnr = value; }
         }
 
-        public int Wheels { get; private set; }
+        public string NrOfWheels { get; private set; }
 
         public override string ToString()
         {
-            return $"{regnr} has {Wheels} wheels.";
+            return $"{regnr} has {NrOfWheels} wheels.";
         }
     }
 }
