@@ -60,7 +60,7 @@ namespace Garage
 
                 foreach (var t in typedGarage)
                 {
-                    output += t.Key + Environment.NewLine;
+                    output += t.Count() + " " + t.Key + Environment.NewLine;
                 }
             }
 

@@ -41,7 +41,14 @@ namespace Garage
                         break;
 
                     case "3":
-                        BuildRazeGarage();
+                        if (!valet.GarageExist)
+                        {
+                            BuildGarage();
+                        }
+                        else
+                        {
+                            RazeGarage();
+                        }
                         break;
 
                     case "4":
@@ -61,44 +68,247 @@ namespace Garage
                         break;
 
                     case "TEST":
-                        if (valet.GarageExist)
-                            valet.RazeGarage();
-                        valet.BuildGarage(15);
-                        valet.Park(new Boat("boat1", "0", "13", "55"));
-                        valet.Park(new Car("car1", "4", "Gas", CarTypes.Sport.ToString()));
-                        valet.Park(new Airplane("ap1", "3", "Kerosene", "250"));
-                        valet.Park(new Car("car2", "5", "Disel", CarTypes.Family.ToString()));
-                        valet.Park(new Car("car3", "4", "Gas", CarTypes.Sport.ToString()));
-                        valet.Park(new Bus("bus1", "6", "Biodisel", "40"));
-                        valet.Park(new Motorcycle("bike1", "2", "HD", "Black"));
-                        valet.Park(new Motorcycle("bike2", "3", "Kawasaki 125", "Pink"));
-                        valet.Park(new Boat("boat2", "0", "5", "600"));
-                        valet.Park(new Airplane("ap2", "3", "Crude oil", "4"));
-                        valet.Park(new Car("car4", "4", "Gas", CarTypes.Family.ToString()));
-                        valet.Park(new Car("car5", "4", "Ethanol", CarTypes.Family.ToString()));
-                        valet.Park(new Car("car6", "4", "Disel", CarTypes.Family.ToString()));
-                        Console.Clear();
-                        Console.WriteLine("Cheater!!!");
-                        Console.WriteLine();
+                        TESTING();
                         break;
 
                     default:
                         Console.Clear();
-                        Console.WriteLine("Incorrect Input");
-                        Console.WriteLine();
+                        ErrorMessage("Incorrect Input");
                         break;
                 }
             }
         }
 
-        private void ListAllWithProperty()
+        public void ErrorMessage(string message)
         {
-            Console.Clear();
+            Console.WriteLine(message);
+            Console.WriteLine();
+        }
+
+        public bool GarageExist()
+        {
             if (!valet.GarageExist)
             {
                 ErrorMessage("Sorry for the inconvenience but the garage is not build yet. Come again after you've built it.");
+                return false;
+            }
+            return true;
+        }
+
+        private void TESTING()
+        {
+            if (valet.GarageExist)
+                valet.RazeGarage();
+            valet.BuildGarage(15);
+            valet.Park(new Boat("boat1", "0", "13", "55"));
+            valet.Park(new Car("car1", "4", "Gas", CarTypes.Sport.ToString()));
+            valet.Park(new Airplane("ap1", "3", "Kerosene", "250"));
+            valet.Park(new Car("car2", "5", "Disel", CarTypes.Family.ToString()));
+            valet.Park(new Car("car3", "4", "Gas", CarTypes.Sport.ToString()));
+            valet.Park(new Bus("bus1", "6", "Biodisel", "40"));
+            valet.Park(new Motorcycle("bike1", "2", "HD", "Black"));
+            valet.Park(new Motorcycle("bike2", "3", "Kawasaki 125", "Pink"));
+            valet.Park(new Boat("boat2", "0", "5", "600"));
+            valet.Park(new Airplane("ap2", "3", "Crude oil", "4"));
+            valet.Park(new Car("car4", "4", "Gas", CarTypes.Family.ToString()));
+            valet.Park(new Car("car5", "4", "Ethanol", CarTypes.Family.ToString()));
+            valet.Park(new Car("car6", "4", "Disel", CarTypes.Family.ToString()));
+            Console.Clear();
+            Console.WriteLine("Cheater!!!");
+            Console.WriteLine();
+        }
+
+        private bool AskYesNo(string str)
+        {
+            Console.Write(str);
+            var shouldRaze = Console.ReadLine();
+            if (shouldRaze.ToLower() == "yes")
+                return true;
+            else if (shouldRaze.ToLower() == "no")
+                return false;
+            else
+            {
+                throw new Exception();
+            }
+        }
+
+        private string AskOptions(string str, params string[] options)
+        {
+            Console.Write(str);
+            var input = Console.ReadLine();
+            foreach (var o in options)
+            {
+                if (input.ToLower() == o.ToLower())
+                    return o;
+            }
+            throw new Exception();
+        }
+
+        private void RazeGarage()
+        {
+            Console.Clear();
+            bool shouldRaze = false;
+            try
+            {
+                shouldRaze = AskYesNo("Do you REALLY want to raze the garage (Yes/No): ");
+            }
+            catch (Exception)
+            {
+                ErrorMessage("We do not accept funny answers. The stocks plummets.");
                 return;
             }
+            if (shouldRaze)
+            {
+                Console.Write("A team of demolition guys has been hired. The garage is gone. ");
+                if (valet.ParkedCount > 0)
+                    Console.WriteLine("Oh, nooes. What about all the vehicles. We forgot to unpark them.");
+                else
+                    Console.WriteLine();
+                valet.RazeGarage();
+            }
+            Console.WriteLine();
+        }
+
+        private void BuildGarage()
+        {
+            Console.Clear();
+            Console.Write("Enter the size of garage: ");
+            if (Int32.TryParse(Console.ReadLine(), out var size))
+            {
+                valet.BuildGarage(size);
+                Console.WriteLine($"A new garage of size {size} has been created.");
+                Console.WriteLine();
+            }
+            else
+                ErrorMessage("The CEO does not like your joke. You are fired.");
+        }
+
+        private Vehicle CreateVehicle()
+        {
+            Console.WriteLine("1) Airplane");
+            Console.WriteLine("2) Boat");
+            Console.WriteLine("3) Bus");
+            Console.WriteLine("4) Car");
+            Console.WriteLine("5) Motorcycle");
+            var vehicleType = Console.ReadLine();
+
+            Console.Write("Enter registration number: ");
+            var regnr = Console.ReadLine();
+            Console.Write("Enter number of wheels: ");
+            var nrOfWheels = Console.ReadLine();
+
+            switch (vehicleType)
+            {
+                case "1":
+                    Console.Write("Type of fuel: ");
+                    var typeOfFuelAP = Console.ReadLine();
+                    Console.Write("Number of seats: ");
+                    var nrOfSeatsAP = Console.ReadLine();
+                    return new Airplane(regnr, nrOfWheels, typeOfFuelAP, nrOfSeatsAP);
+
+                case "2":
+                    Console.Write("Length of boat: ");
+                    var lengthOfBoat = Console.ReadLine();
+                    Console.Write("cc of cylinder volume: ");
+                    var cylinderVolume = Console.ReadLine();
+                    return new Boat(regnr, nrOfWheels, lengthOfBoat, cylinderVolume);
+
+                case "3":
+                    Console.Write("Type of fuel: ");
+                    var typeOfFuelBus = Console.ReadLine();
+                    Console.Write("Number of seats: ");
+                    var nrOfSeatsBus = Console.ReadLine();
+                    return new Bus(regnr, nrOfWheels, typeOfFuelBus, nrOfSeatsBus);
+
+                case "4":
+                    Console.Write("Type of fuel: ");
+                    var typeOfFuelCar = Console.ReadLine();
+                    string carType = "";
+                    try
+                    {
+                        carType = AskOptions($"What type of car is it ({CarTypes.Sport}/{CarTypes.Family}): ",
+                            CarTypes.Sport.ToString(),
+                            CarTypes.Family.ToString());
+                    }
+                    catch (Exception)
+                    {
+                        return null;
+                    }
+                    return new Car(regnr, nrOfWheels, typeOfFuelCar, carType);
+
+                case "5":
+                    Console.Write("Type of bike: ");
+                    var typeOfBike = Console.ReadLine();
+                    Console.Write("Color of bike: ");
+                    var color = Console.ReadLine();
+                    return new Motorcycle(regnr, nrOfWheels, typeOfBike, color);
+
+                default:
+                    Console.WriteLine("No valid vehicle selected. We cannot park your vehicle in here.");
+                    return null;
+            }
+        }
+
+        private void Park()
+        {
+            Console.Clear();
+            if (!GarageExist()) return;
+
+            Console.WriteLine("Welcome to the Garage! What type of vehicle are you operating?");
+            var vehicle = CreateVehicle();
+            if (vehicle == null)
+            {
+                Console.WriteLine("No valid vehicle selected. We cannot park your vehicle in here.");
+                Console.WriteLine();
+                return;
+            }
+            DidPark didPark = valet.Park(vehicle);
+            if (didPark == DidPark.Parked)
+                Console.WriteLine("Your vehicle is parked");
+            else if (didPark == DidPark.AlreadyExist)
+                Console.WriteLine("Your vehicle has a registration number that already exists in our garage. Get a new vehicle and try again.");
+            else
+                Console.WriteLine("The garage has reached its maximum capacity.");
+            Console.WriteLine();
+        }
+
+        private void UnPark()
+        {
+            Console.Clear();
+            if (!GarageExist()) return;
+
+            Console.Write("Enter registration number:");
+            var regnr = Console.ReadLine();
+            var vehicle = valet.UnPark(regnr);
+            if (vehicle == null)
+                ErrorMessage($"There is no vehicle with the registraton number {regnr}. Thank you, come back again.");
+            else
+            {
+                Console.WriteLine("Here you go.");
+                Console.WriteLine(vehicle);
+                Console.WriteLine("Thank you for parking here. Please come back again.");
+                Console.WriteLine();
+            }
+        }
+
+        private void ListAll()
+        {
+            Console.Clear();
+            if (!GarageExist()) return;
+            Console.WriteLine(valet.ListAllParked());
+        }
+
+        private void ListAllTypes()
+        {
+            Console.Clear();
+            if (!GarageExist()) return;
+            Console.WriteLine(valet.ListAllTypes());
+        }
+
+        private void ListAllWithProperty()
+        {
+            Console.Clear();
+            if (!GarageExist()) return;
 
             Console.WriteLine("What type of vehicle are you searching for?");
             Console.WriteLine("1) Airplane");
@@ -160,71 +370,71 @@ namespace Garage
 
             Properties ppProperty;
             string propertyValue = null;
-            switch (vehicleType + propertySelected)
+            switch (vehicleType + " " + propertySelected)
             {
-                case "11": // airplane + regnr
-                case "21": // boat + regnr
-                case "31": // bus + regnr
-                case "41": // car + regnr
-                case "51": // bike + regnr
-                case "61": // ALL + regnr
+                case "1 1": // airplane + regnr
+                case "2 1": // boat + regnr
+                case "3 1": // bus + regnr
+                case "4 1": // car + regnr
+                case "5 1": // bike + regnr
+                case "6 1": // ALL + regnr
                     Console.Write("Enter registration number:");
                     ppProperty = Properties.RegNr;
                     break;
 
-                case "12": // airplane + nr of wheels
-                case "22": // boat + nr of wheels
-                case "32": // bus + nr of wheels
-                case "42": // car + nr of wheels
-                case "52": // bike + nr of wheels
-                case "62": // all + nr of wheels
+                case "1 2": // airplane + nr of wheels
+                case "2 2": // boat + nr of wheels
+                case "3 2": // bus + nr of wheels
+                case "4 2": // car + nr of wheels
+                case "5 2": // bike + nr of wheels
+                case "6 2": // all + nr of wheels
                     Console.Write("Enter number of wheels:");
                     ppProperty = Properties.NrOfWheels;
                     break;
 
-                case "13": // airplane + type of fuel
-                case "33": // bus + type of fuel
-                case "43": // car + type of fuel
+                case "1 3": // airplane + type of fuel
+                case "3 3": // bus + type of fuel
+                case "4 3": // car + type of fuel
                     Console.Write("Type of fuel:");
                     ppProperty = Properties.FuelType;
                     break;
 
-                case "14": // airplane + seats
-                case "34": // bus + seats
+                case "1 4": // airplane + seats
+                case "3 4": // bus + seats
                     Console.Write("Number of seats:");
                     ppProperty = Properties.NrOfSeats;
                     break;
 
-                case "23": // boat + length
+                case "2 3": // boat + length
                     Console.Write("Length of boat:");
                     ppProperty = Properties.Length;
                     break;
 
-                case "24": // boat + cylinder volume
+                case "2 4": // boat + cylinder volume
                     Console.Write("cc of cylinder volume:");
                     ppProperty = Properties.CylinderVolume;
                     break;
 
-                case "44": // car + is sports car
-                    Console.Write("What type of car is it (Sport/Family):");
+                case "4 4": // car + is sports car
+                    //Console.Write("What type of car is it (Sport/Family):");
                     ppProperty = Properties.CarType;
                     break;
 
-                case "53": // bike + type
+                case "5 3": // bike + type
                     Console.Write("Type of bike:");
                     ppProperty = Properties.Brand;
                     break;
 
-                case "54": // bike + color
+                case "5 4": // bike + color
                     Console.Write("Color of bike:");
                     ppProperty = Properties.Color;
                     break;
 
-                case "15": // all airplanes
-                case "25": // all boats
-                case "35": // all buses
-                case "45": // all cars
-                case "55": // all bikes
+                case "1 5": // all airplanes
+                case "2 5": // all boats
+                case "3 5": // all buses
+                case "4 5": // all cars
+                case "5 5": // all bikes
                     ppProperty = Properties.Any;
                     break;
 
@@ -236,12 +446,14 @@ namespace Garage
 
             if (vtVehicleType == VehicleTypes.Car && ppProperty == Properties.CarType)
             {
-                var carType = Console.ReadLine();
-                if (carType.ToLower() == CarTypes.Sport.ToString().ToLower())
-                    propertyValue = CarTypes.Sport.ToString();
-                else if (carType.ToLower() == CarTypes.Family.ToString().ToLower())
-                    propertyValue = CarTypes.Family.ToString();
-                else
+                string carType = "";
+                try
+                {
+                    carType = AskOptions($"What type of car is it ({CarTypes.Sport}/{CarTypes.Family}): ",
+                        CarTypes.Sport.ToString(),
+                        CarTypes.Family.ToString());
+                }
+                catch (Exception)
                 {
                     ErrorMessage("We do not accept funny answers. Back to main you go.");
                     return;
@@ -254,185 +466,8 @@ namespace Garage
                 Console.WriteLine();
             }
 
+            Console.Clear();
             Console.WriteLine(valet.ListAllVehiclesWithProperty(vtVehicleType, ppProperty, propertyValue));
-            Console.WriteLine();
-        }
-
-        private void ListAllTypes()
-        {
-            Console.Clear();
-            if (!valet.GarageExist)
-            {
-                ErrorMessage("Sorry for the inconvenience but the garage is not build yet. Come again after you've built it.");
-                return;
-            }
-            Console.WriteLine(valet.ListAllTypes());
-        }
-
-        private void ListAll()
-        {
-            Console.Clear();
-            if (!valet.GarageExist)
-            {
-                ErrorMessage("Sorry for the inconvenience but the garage is not build yet. Come again after you've built it.");
-                return;
-            }
-            Console.WriteLine(valet.ListAllParked());
-        }
-
-        private void BuildRazeGarage()
-        {
-            Console.Clear();
-            if (!valet.GarageExist)
-            {
-                Console.Write("Enter the size of garage: ");
-                if (Int32.TryParse(Console.ReadLine(), out var size))
-                {
-                    valet.BuildGarage(size);
-                    Console.WriteLine($"A new garage of size {size} has been created.");
-                    Console.WriteLine();
-                }
-                else
-                    ErrorMessage("The CEO does not like your joke. You are fired.");
-            }
-            else
-            {
-                Console.Write("Do you REALLY want to raze the garage (Yes/No):");
-                var shouldRaze = Console.ReadLine();
-                bool bShouldRaze;
-                if (shouldRaze.ToLower() == "yes")
-                    bShouldRaze = true;
-                else if (shouldRaze.ToLower() == "no")
-                    bShouldRaze = false;
-                else
-                {
-                    ErrorMessage("We do not accept funny answers. The stocks plummets.");
-                    return;
-                }
-                if (bShouldRaze)
-                {
-                    Console.Write("A team of demolition guys has been hired. The garage is gone. ");
-                    if (valet.ParkedCount > 0)
-                        Console.WriteLine("Oh, nooes. What about all the vehicles. We forgot to unpark them.");
-                    valet.RazeGarage();
-                }
-                Console.WriteLine();
-            }
-        }
-
-        private void UnPark()
-        {
-            Console.Clear();
-            if (!valet.GarageExist)
-            {
-                ErrorMessage("Sorry for the inconvenience but the garage is not build yet. Come again after you've built it.");
-                return;
-            }
-            Console.Write("Enter registration number:");
-            var regnr = Console.ReadLine();
-            var vehicle = valet.UnPark(regnr);
-            if (vehicle == null)
-                ErrorMessage($"There is no vehicle with the registraton number {regnr}. Thank you, come back again.");
-            else
-            {
-                Console.WriteLine("Here you go. " + vehicle);
-                Console.WriteLine("Thank you for parking here. Please come back again.");
-                Console.WriteLine();
-            }
-        }
-
-        private void Park()
-        {
-            Console.Clear();
-            if (!valet.GarageExist)
-            {
-                ErrorMessage("Sorry for the inconvenience but the garage is not build yet. Come again after you've built it.");
-                return;
-            }
-
-            Console.WriteLine("Welcome to the Garage! What type of vehicle do you want to park?");
-            Console.WriteLine("1) Airplane");
-            Console.WriteLine("2) Boat");
-            Console.WriteLine("3) Bus");
-            Console.WriteLine("4) Car");
-            Console.WriteLine("5) Motorcycle");
-            var vehicleType = Console.ReadLine();
-
-            Console.Write("Enter registration number:");
-            var regnr = Console.ReadLine();
-            Console.Write("Enter number of wheels:");
-            var nrOfWheels = Console.ReadLine();
-
-            DidPark didPark;
-            switch (vehicleType)
-            {
-                case "1":
-                    Console.Write("Type of fuel:");
-                    var typeOfFuelAP = Console.ReadLine();
-                    Console.Write("Number of seats:");
-                    var nrOfSeatsAP = Console.ReadLine();
-                    didPark = valet.Park(new Airplane(regnr, nrOfWheels, typeOfFuelAP, nrOfSeatsAP));
-                    break;
-
-                case "2":
-                    Console.Write("Length of boat:");
-                    var lengthOfBoat = Console.ReadLine();
-                    Console.Write("cc of cylinder volume:");
-                    var cylinderVolume = Console.ReadLine();
-                    didPark = valet.Park(new Boat(regnr, nrOfWheels, lengthOfBoat, cylinderVolume));
-                    break;
-
-                case "3":
-                    Console.Write("Type of fuel:");
-                    var typeOfFuelBus = Console.ReadLine();
-                    Console.Write("Number of seats:");
-                    var nrOfSeatsBus = Console.ReadLine();
-                    didPark = valet.Park(new Bus(regnr, nrOfWheels, typeOfFuelBus, nrOfSeatsBus));
-                    break;
-
-                case "4":
-                    Console.Write("Type of fuel:");
-                    var typeOfFuelCar = Console.ReadLine();
-                    Console.Write("Is it a sports car (Yes/No):");
-                    var carType = Console.ReadLine();
-                    if (carType.ToLower() == CarTypes.Sport.ToString().ToLower())
-                        carType = CarTypes.Sport.ToString();
-                    else if (carType.ToLower() == CarTypes.Family.ToString().ToLower())
-                        carType = CarTypes.Family.ToString();
-                    else
-                    {
-                        ErrorMessage("We do not accept funny answers. Back to main you go.");
-                        return;
-                    }
-                    Console.WriteLine();
-                    didPark = valet.Park(new Car(regnr, nrOfWheels, typeOfFuelCar, carType));
-                    break;
-
-                case "5":
-                    Console.Write("Type of bike:");
-                    var typeOfBike = Console.ReadLine();
-                    Console.Write("Color of bike:");
-                    var color = Console.ReadLine();
-                    didPark = valet.Park(new Motorcycle(regnr, nrOfWheels, typeOfBike, color));
-                    break;
-
-                default:
-                    Console.WriteLine("No valid vehicle selected. We don't want your vehicle in here.");
-                    Console.WriteLine();
-                    return;
-            }
-            if (didPark == DidPark.Parked)
-                Console.WriteLine("Your vehicle is parked");
-            else if (didPark == DidPark.AlreadyExist)
-                Console.WriteLine("Your vehicle has a registration number that already exists in our garage. Get a new vehicle and try again.");
-            else
-                Console.WriteLine("The garage has reached its maximum capacity.");
-            Console.WriteLine();
-        }
-
-        public void ErrorMessage(string message)
-        {
-            Console.WriteLine(message);
             Console.WriteLine();
         }
     }

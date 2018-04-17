@@ -1,11 +1,5 @@
 ﻿namespace Garage
 {
-    public enum CarTypes
-    {
-        Sport,
-        Family
-    }
-
     public class Car : Vehicle
     {
         public Car(string regnr, string wheels, string fuelType, string carType) : base(regnr, wheels)
