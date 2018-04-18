@@ -467,12 +467,11 @@ namespace Garage
 
             if (vtVehicleType == VehicleTypes.Car && ppProperty == Properties.CarType)
             {
-                string carType = "";
                 try
                 {
-                    carType = AskOptions($"What type of car is it ({CarTypes.Sport}/{CarTypes.Family}): ",
-                        CarTypes.Sport.ToString(),
-                        CarTypes.Family.ToString());
+                    propertyValue = AskOptions($"What type of car is it ({CarTypes.Sport}/{CarTypes.Family}): ",
+                                    CarTypes.Sport.ToString(),
+                                    CarTypes.Family.ToString());
                 }
                 catch (Exception)
                 {
