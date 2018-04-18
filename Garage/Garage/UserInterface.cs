@@ -194,30 +194,51 @@ namespace Garage
 
             Console.Write("Enter registration number: ");
             var regnr = Console.ReadLine();
-            Console.Write("Enter number of wheels: ");
-            var nrOfWheels = Console.ReadLine();
+            string nrOfWheels;
+            do
+            {
+                Console.Write("Enter number of wheels: ");
+                nrOfWheels = Console.ReadLine();
+            } while (!Int32.TryParse(nrOfWheels, out int temp));
+
 
             switch (vehicleType)
             {
                 case "1":
                     Console.Write("Type of fuel: ");
                     var typeOfFuelAP = Console.ReadLine();
-                    Console.Write("Number of seats: ");
-                    var nrOfSeatsAP = Console.ReadLine();
+                    string nrOfSeatsAP;
+                    do
+                    {
+                        Console.Write("Number of seats: ");
+                        nrOfSeatsAP = Console.ReadLine();
+                    } while (!Int32.TryParse(nrOfSeatsAP, out int temp));
                     return new Airplane(regnr, nrOfWheels, typeOfFuelAP, nrOfSeatsAP);
 
                 case "2":
-                    Console.Write("Length of boat: ");
-                    var lengthOfBoat = Console.ReadLine();
-                    Console.Write("cc of cylinder volume: ");
-                    var cylinderVolume = Console.ReadLine();
+                    string lengthOfBoat;
+                    do
+                    {
+                        Console.Write("Length of boat: ");
+                        lengthOfBoat = Console.ReadLine();
+                    } while (!Int32.TryParse(lengthOfBoat, out int temp));
+                    string cylinderVolume;
+                    do
+                    {
+                        Console.Write("cc of cylinder volume: ");
+                        cylinderVolume = Console.ReadLine();
+                    } while (!float.TryParse(cylinderVolume, out float temp));
                     return new Boat(regnr, nrOfWheels, lengthOfBoat, cylinderVolume);
 
                 case "3":
                     Console.Write("Type of fuel: ");
                     var typeOfFuelBus = Console.ReadLine();
-                    Console.Write("Number of seats: ");
-                    var nrOfSeatsBus = Console.ReadLine();
+                    string nrOfSeatsBus;
+                    do
+                    {
+                        Console.Write("Number of seats: ");
+                        nrOfSeatsBus = Console.ReadLine();
+                    } while (!Int32.TryParse(nrOfSeatsBus, out int temp));
                     return new Bus(regnr, nrOfWheels, typeOfFuelBus, nrOfSeatsBus);
 
                 case "4":
